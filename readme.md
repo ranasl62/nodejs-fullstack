@@ -2,5 +2,6 @@
 ***
     Nodejs-core,
     Expressjs,
-    nodemon
+    nodemon,
+    mysql2
 ***
