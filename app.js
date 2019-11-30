@@ -22,6 +22,9 @@ const rootDir = require('./util/path');
 
 const expressHbs = require('express-handlebars');
 
+const db = require('./util/database');
+
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(rootDir, 'public')));
 
@@ -44,4 +47,13 @@ app.use((req, res, next) => {
 // app.use((req, res, next) => {
 //     res.sendFile(path.join(rootDir, 'views', '404.html'));
 // });
+
+db.execute('select * from users').then((res) => {
+
+    console.log(res);
+
+}).catch(() => {
+
+});
+
 app.listen(3000);
