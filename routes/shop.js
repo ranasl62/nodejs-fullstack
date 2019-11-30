@@ -1,33 +1,28 @@
-const path = require("path");
+const path = require('path');
+
 const express = require('express');
-const rootDir = require('./../util/path');
+
+const shopController = require('../controllers/shop');
+const isAuth = require('../middleware/is-auth');
+
 const router = express.Router();
-const Product = require('./../models/product');
 
-router.get('/get-product', (req, res, next) => {
+router.get('/', shopController.getIndex);
 
-    try {
-        res.sendFile(path.join(rootDir, 'views', 'shop.html'));
-    } catch (err) {
-        return res.status(500).send({ message: 'Something wen wrong', status: "fail" });
-    }
-});
+router.get('/products', shopController.getProducts);
 
-router.get('/', (req, res, next) => {
+router.get('/products/:productId', shopController.getProduct);
 
-    try {
-        console.log(".........................");
-        Product.fetchAll(products => {
-            console.log(products);
-        })
+router.get('/cart', isAuth, shopController.getCart);
 
-        console.log(".........................");
+router.post('/cart', isAuth, shopController.postCart);
 
-        // res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
-        res.status(200).render('add-product', { layout: false, pageTitle: 'Add Product' });
-    } catch (err) {
-        return res.status(500).send({ message: 'Something wen wrong', status: "fail" });
-    }
-});
+router.post('/cart-delete-item', isAuth, shopController.postCartDeleteProduct);
+
+router.get('/checkout', isAuth, shopController.getCheckout);
+
+router.get('/orders', isAuth, shopController.getOrders);
+
+router.get('/orders/:orderId', isAuth, shopController.getInvoice);
 
 module.exports = router;
